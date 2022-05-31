@@ -1,0 +1,136 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{../images/}}}
+\begin{document}
+\noindent In a specific population, $p$ of the people make more then 50,000\$ a year. We are interested in estimating $p$. We go through the following process:
+
+\begin{itemize}
+
+    \item Put $100$ envelopes in a box in the following way - $100x$ of them contain the question "Is your annual salary higher than 50,000\$ a year?" and the rest of the envelopes contain the question "Is your annual salary lower or equal to 50,000\$ a year?"
+    
+    \item Choose $N$ people in random from the population. 
+    
+    \item Each person takes an envelope, reads the question returns the envelope and answers the question. 
+    
+    \item Assume only the person who takes out the envelope knows which question they got, and that they answer honestly.
+    
+\end{itemize}
+
+\noindent Denote by $Y$ the number of people who answered yes, and $p'$ the probability that the first person answers yes. Assume the $x$ is known. 
+
+\begin{enumerate}
+    
+    \item How does $Y$ distribute?
+    
+    \item Find an estimator for $p$ using the moment method - $\hat{p}_{MME}$. 
+    
+    \item Calculate the mean and variance of $\hat{p}_{MME}$. Express what you think the value of $x$ should be based on this. 
+    
+    \item Express the possible set of values of $p'$ as a function of $x$. 
+    
+    \item Find a maximum likelihood estimator for $p'$.
+    
+    \item Set $x=\frac{1}{3}$ (for this part only). Show that if only one person agreed to participate ($N=1$) it is more optimal to use the constant estimator $\frac{1}{2}$ instead of the MLE found in the last part
+    
+    \item Find an MLE estimator for $p$. Discuss the advantages and disadvantages of $\hat{p}_{\text{MLE}}$ versus $\hat{p}_{MME}$.
+    
+\end{enumerate}
+(This process is used to deal with sensitive information).\\
+\noindent\line(1,0){480}
+\subsection*{Solution:}
+\begin{enumerate}
+    \item Define by $X_i$ the Bernoulli random variable of the answer of the $i$-th person being "yes". First, examine the case for the first person:\\
+    \\
+    Our goal is to find $\mathbb{P}(X_1=1)$.
+    Now, define the following events:
+    \begin{itemize}
+        \item $A:=\{\text{the question in the envelope was: "Is your annual salary higher than 50,000\$"}\}$.
+        \item $B:= \{\text{the person which is picked has an annual salary higher than 50,000\$}\}$.
+    \end{itemize}
+    Since we assume that the person is honest, we get that (by the law of total probability) $$\mathbb{P}(X=1) = \mathbb{P}(A\cap B)+\mathbb{P}(\Bar{A}\cap \Bar{B})\overset{(*)}{=}\mathbb{P}(A)\cdot\mathbb{P}(B)+\mathbb{P}(\Bar{A})\cdot\mathbb{P}(\Bar{B})$$
+    (\emph{* the people and the envelopes are chosen independently, therefore $A$ and $B$ are independent.})\\
+    We have that $\mathbb{P}(A)=\frac{100x}{100}=x$. Assuming that $p \in [0, 1]$, we have that $\mathbb{P}(B)=p$. Thus, we get that \[\mathbb{P}(X=1)=p'=x\cdot p + (1-x)\cdot (1-p) = 2px + 1 -p -x = (2x-1)\cdot p +1-x\]
+    Therefore \hlfancy{goodcolor}{$X\sim \text{Ber}(p')$}.\\\\ 
+    Since each person returns the envelope he had chosen and the people are chosen independently, we get that for all $1\le i \le N$, $X_i\sim Ber(p')$ i.i.d (where $p'= (2x-1)\cdot p +1-x$). Since $Y$ is the sum of $N$ i.i.d Bernoulli random variables, we conclude that \hlfancy{goodcolor}{$Y\sim \text{Bin}(N, p')$}.
+    \item \label{question: 2} We will use the MME to get an estimator for $p'$, denoted by $\hat{p'}_{MME}$, and derive the requested estimator from it ($\hat{p}_{MME}$). Notice that we have $N$ samples of $Ber(p')$, therefore it is only natural to use the Moment Method estimation on $Ber(p')$. The Moment Method Estimation states that to estimate $p' = \mathbb{E}[Ber(p')]$, it suffices to estimate the first moment of $Ber(p')$, in our case $\hat{p'}_{MME}=\frac{1}{N}\sum_{i=1}^N X_i=\frac{Y}{N}$. Since $p' = (2x-1)\cdot p+1-x$, it holds that 
+    $$\hat{p'}_{MME} = (2x-1)\cdot\hat{p}_{MME}+1-x$$
+    $$\overset{(**)}{\Longrightarrow} \mathcolorbox{goodcolor}{\hat{p}_{MME}= \frac{\hat{p'}_{MME}+x-1}{2x-1}=\frac{Y/N+x-1}{2x-1}}$$
+    \emph{** This is assuming that $x\neq 1/2$. If indeed $x = 1/2$, then we have that $p' = p +1 -p -1/2= 1/2$ and thus does not depends on $p$ and we could not estimate $p$ using the Moment Method Estimation.}
+    \item \label{question: 3}Since $Y\sim Bin(N, p')$ we have that $\mathbb{E}[Y] = Np', \, Var(Y) =Np'(1-p')$. Therefore:
+    \begin{itemize}
+        \item \hlfancy{goodcolor}{$\mathbb{E}[\hat{p}_{MME}]$} $=\mathbb{E}\bigg[\frac{\frac{Y}{N}+x-1}{2x-1}\bigg]\overset{\text{linearity of expc.}}{=}\frac{\frac{\mathbb{E}[Y]}{N}+x-1}{2x-1}=\frac{\frac{N\cdot p'}{N}+x-1}{2x-1}=\frac{2px+1-p-x+x-1}{2x-1}=$\hlfancy{goodcolor}{$p$}
+    \item \hlfancy{goodcolor}{$Var(\hat{p}_{MME})$} $=Var\left(\frac{\frac{Y}{N}+x-1}{2x-1}\right)\overset{(***)}{=}Var\left(\frac{Y/N}{2x-1}\right)=\frac{Var(Y)}{N^2(2x-1)^2}=\frac{Np'(1-p')}{N^2(2x-1)^2}=\frac{p'(1-p')}{N(2x-1)^2}=\\ \frac{\left((2x-1)\cdot p+1-x\right)\cdot\left(x-(2x-1)\cdot p\right)}{N(2x-1)^2} = \frac{(2x-1)^2\cdot p(1-p)+(1-x)x}{N(2x-1)^2}=$ \hlfancy{goodcolor}{$\frac{p(1-p)}{N}+\frac{(1-x)x}{N(2x-1)^2}$}\\
+        \emph{*** The variance is invariant to changes in the location parameter}.
+    \end{itemize}
+    First, as stated in the last question (\ref{question: 2}), $x\ne \frac{1}{2}$.\\
+    
+    Recall the definition of the Mean Squared Error (MSE):
+    \begin{mdframed}[backgroundcolor=blue!20]
+        \begin{definition}
+            Given an estimator $\hat{\theta}$ we define the Mean-Square-Error \[MSE(\hat{\theta})=\mathbb{E}_{\theta}\left[(\hat{\theta}-\theta)^2\right]\]
+        \end{definition}
+        It can be seen (similar to how you calculate variance of a random variable) that this is equal to $\text{bias}^2(\hat{\theta})+\text{Var}(\hat{\theta})$ Where the bias is $\text{bias}(\hat{\theta}):=\theta-\mathbb{E}[\hat{\theta}]$
+    \end{mdframed}
+    Where $\text{Bias}_p(\hat{p}_{MME}) = \mathbb{E}_p\left[\hat{p}_{MME}\right]-p$.
+    Now, notice that $\hat{p}_{MME}$ is an unbiased estimator and therefore $\text{MSE}_p[\hat{p}_{MME}] = Var_p(\hat{p}_{MME})$. Moreover, the left term in $Var(\hat{p}_{MME})$ is exactly $Var\left(\frac{Z}{N}\right)$ where $Z\sim Bin(p, N)$, and is therefore independent of $x$. So in order to minimize the MSE and optimize the estimator, we need to minimize the right term of $Var(\hat{p}_{MME})$. We have that $\frac{(1-x)x}{N(2x-1)^2}\ge0$ since $x\in[0,1]$, and it is easy to see that it is equal to $0$ if and only if $x\in \{0, 1\}$. This implies that we minimize the error if we ask the same question to everyone (thus avoiding the uncertainty of determining which question was asked).
+    \item \label{question: 4}First, as we saw in question \ref{question: 2}, if $x=\frac{1}{2}$ then we have that $p' =\frac{1}{2}$ and does not depend on 
+    $p$ and $x$. So we will consider now the case where $x\neq \frac{1}{2}$:
+    \begin{itemize}
+        \item $\boldsymbol{x<\frac{1}{2}}$: Since $p\in [0, 1], x<\frac{1}{2}$ we have that:
+        $$x=2x-1+1-x\le p' = (2x-1)\cdot p +1 -x\le1-x$$
+        \item $\boldsymbol{x>\frac{1}{2}}$: Since $p\in [0, 1], x>\frac{1}{2}$ we have that:
+        $$1-x\le p' = (2x-1)\cdot p +1 -x\le2x-1+1-x=x$$
+    \end{itemize}
+    Summarized, we have that: 
+    \[\mathcolorbox{goodcolor}{p' \in \begin{cases} 
+    [x, 1-x] & 0\le x<1/2\\
+    [1-x, x] & 1/2< x\le 1\\
+    \left\{1/2\right\} & x= 1/2
+    \end{cases}}\]
+    \item \label{question: 5}First, notice that the likelihood of a single observation of a person's answer ($x_i\in \{0, 1\}$) is $L(x_i|p')=(p')^{x_i}\cdot(1-p')^{1-x_i}$ (recall that the answers of the people are identical and independently distributed according to $Ber(p')$). Thus, the likelihood of $N$ observations $\Vec{x}=(x_1,..., x_N)$ is the following:
+    \begin{align*}L(p'\mid x_1,...,x_N)\overset{X_i\, \text{are i.i.d}}{=}\prod\limits_{i=1}^{N}L(x_i|p')&=\prod\limits_{i=1}^{N}(p')^{x_i}\cdot(1-p')^{1-x_i}=(p')^{\sum_{i=1}^N x_i}\cdot(1-p')^{\sum_{i=1}^N (1-x_i)}\\ &\overset{Y=\sum_{i=1}^N x_i}{=}(p')^{Y}\cdot(1-p')^{N-Y}\end{align*}
+    We want to estimate $p'$ by $\hat{p'}_{MLE}=\text{argmax}_{p'\in[0, 1]}L(p'|\Vec{x})$. For simplicity, we will find the argmax of the log-likelihood function ($\log$ is a monotone-increasing function, therefore it has the same argmax as the original function).
+    \begin{align*}l(\Vec{x}|p')&=\log\left((p')^{Y}\cdot(1-p')^{N-Y}\right)=Y\log(p')+(N-Y)\log(1-p')\\
+    \frac{\partial l}{\partial p'}&= \frac{Y}{p'}-\frac{N-Y}{1-p'}=\frac{Y-p'\cdot Y+p'\cdot Y-p'\cdot N}{p'(1-p')}=\frac{Y-p'\cdot N}{p'(1-p')}\end{align*}
+    And it is equals to 0 if and only if $p' = \frac{Y}{N}$. It is easy to see that for $0<p'<\frac{Y}{N}$ the derivative is positive and for $\frac{Y}{N}<p'<1$ it is negative and thus it is the argmax of the log-likelihood. From the last question (\ref{question: 4}) we have that the value of $p'$ depends on the value of $x$ (the percentage of the envelopes with the question "Is your annual salary higher than 50,000\$ a year?"), therefore we actually have that:
+    \[\mathcolorbox{goodcolor}{\hat{p'}_{MLE}=\begin{cases}
+    x & \left(0\le x<1/2\, \land\, Y/N<x\right)\,\vee\,\left(1/2<x\le1\,\land \,Y/N>x\right) \\
+    Y/N & \left(0\le x<1/2 \,\land\, x<Y/N<1-x\right)\,\vee\,\left(1/2<x\le1\,\land\, 1-x<Y/N<x\right)\\
+    1-x & \left(0\le x<1/2\, \land\, Y/N>1-x\right)\,\vee\,\left(1/2<x\le1\,\land\, Y/N<1-x\right)\\
+    1/2 & x=1/2
+    \end{cases}}\]
+    \item Set $x=1/3$. From question \ref{question: 4} we have that $1/3\le p'\le2/3$. If we sample only one individual (equivalent to only one person agreeing to participate), and thus $Y/N=X_1\in \{0, 1\}$ and therefore $Y/N<1/3$ or $Y/N>2/3$. From last question we get:
+    \[\hat{p'}_{MLE}=\begin{cases}
+    2/3 & \text{w.p. } \mathbb{P}\left(Y/N=X_1=1\right)=p'\\
+    1/3 & \text{w.p. }\mathbb{P}\left(Y/N=X_1=0\right)=1-p'
+    \end{cases}\]
+    (depends on the observation).\\
+    We compute and compare the MSE for each estimator. 
+    \begin{itemize}
+        \item $\text{MSE}_{p'}[\hat{p'}_{MLE}]$:\\
+        $$\text{Bias}_{p'}(\hat{p'}_{MLE})=\mathbb{E}\left[\hat{p'}_{MLE}\right]-p'=p'\cdot\frac{2}{3}+(1-p')\cdot\frac{1}{3}-p'=\frac{1}{3}-\frac{2}{3}p'$$
+        $$Var\left(\hat{p'}_{MLE}\right)=\mathbb{E}\left[\hat{p'}_{MLE}^2\right]-\left(\frac{1}{3}+\frac{1}{3}p'\right)^2=\frac{1}{9}+\frac{1}{3}p'-\frac{1}{9}-\frac{2}{9}p'-\frac{1}{9}(p')^2=-\frac{1}{9}(p')^2+\frac{1}{9}p'$$
+        $$\Longrightarrow \text{MSE}_{p'}[\hat{p'}_{MLE}]=Var(\hat{p'}_{MLE})+\text{Bias}^2_{p'}(\hat{p'}_{MLE})=\frac{1}{9}-\frac{1}{3}p'+\frac{1}{3}(p')^2$$
+        \item $\text{MSE}_{p'}\left[\frac{1}{2}\right]:$\\
+        $$\text{Bias}_{p'}\left(\frac{1}{2}\right)=\frac{1}{2}-p', \quad Var_{p'}\left(\frac{1}{2}\right)=0$$
+        $$\Longrightarrow \text{MSE}_{p'}\left[\frac{1}{2}\right]= \left(\frac{1}{2}-p'\right)^2=\frac{1}{4}-p'+p'^2$$
+    \end{itemize}
+    It holds that:
+    \begin{center}
+        \begin{align*}
+        \text{MSE}_{p'}\left[\frac{1}{2}\right]<\text{MSE}_{p'}\left[\hat{p'}_{MLE}\right] &\Longleftrightarrow\, \frac{1}{4}-p'+(p')^2<\frac{1}{9}-\frac{1}{3}p'+\frac{1}{3}(p')^2\\
+        &\Longleftrightarrow\,0<-\frac{5}{36}+\frac{2}{3}p'-\frac{2}{3}(p')^2\\
+        &\Longleftrightarrow\, 0.295<p'<0.704
+        \end{align*}
+    \end{center}
+    And since $1/3\le p'\le 2/3$ we proved the requested. $\blacksquare$
+    \item Recall that $p' = (2x-1)\cdot p+1-x$. This yields $\hat{p}_{MLE}= \frac{x-1+\hat{p'}_{MLE}}{2x-1}$. From question \ref{question: 5} we get:
+    \[\mathcolorbox{goodcolor}{\hat{p}_{MLE}=\begin{cases}
+    1 & \left(0\le x<1/2\, \land\, Y/N<x\right)\,\vee\,\left(1/2<x\le1\,\land \,Y/N>x\right) \\
+    \hat{p}_{MME}=\frac{x-1+Y/N}{2x-1} & \left(0\le x<1/2 \,\land\, x<Y/N<1-x\right)\,\vee\,\left(1/2<x\le1\,\land\, 1-x<Y/N<x\right)\\
+    0 & \left(0\le x<1/2\, \land\, Y/N>1-x\right)\,\vee\,\left(1/2<x\le1\,\land\, Y/N<1-x\right)
+    \end{cases}}\] 
+    \emph{(Notice that when $x=\frac{1}{2}$, then $\hat{p}_{MLE}$ is undefined.)}\\\\
+    In question \ref{question: 3} we saw that $\hat{p}_{MME}$ is unbiased, and since $\hat{p}_{MLE}$ is not always equal to it, then it is not always unbiased. Moreover, notice that whenever $Y/N$ is outside of the boundaries then $\hat{p}_{MME}$ can be either $<0$ or $>1$, which causes a bigger error whereas $\hat{p}_{MLE}$ is either $0$ or $1$. Therefore, $\hat{p}_{MLE}$ induces less error and thus preferable to use.
+\end{enumerate}
+\noindent\makebox[\linewidth]{\rule{\linewidth}{2pt}}
+\end{document}

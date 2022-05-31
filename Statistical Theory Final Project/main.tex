@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, bbm, amsthm, graphicx, subfiles}
+\usepackage{fullpage, soul, subcaption}
+\usepackage[svgnames]{xcolor}
+\usepackage{mdframed}
+\usepackage{minted}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    citecolor=blue,
+    pdftitle={Statistical Theory Final Project},
+    pdfpagemode=FullScreen
+    }
+
+\graphicspath{ {./images/} }
+\title{Statistical Theory Final Project}
+\author{Yisrael Haber, Hadar Kaner}
+
+\newcommand{\hlfancy}[2]{\sethlcolor{#1}\hl{#2}}
+\newcommand{\mathcolorbox}[2]{\colorbox{#1}{$\displaystyle #2$}}
+
+\definecolor{goodcolor}{rgb}{0.296875, 0.96484375, 0.67578125}
+
+\begin{document}
+\maketitle
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{exercise}{Exercise}
+\newtheorem{solution}{Solution Of}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{notation}{Notation}
+\newtheorem{claim}{Claim}
+\renewcommand\qedsymbol{$\blacksquare$}
+
+
+\tableofcontents
+
+\section{First Problem}
+\subfile{Problems/First Problem}
+
+\section{Second Problem}
+\subfile{Problems/Second Problem}
+
+\section{Third Problem}
+\subfile{Problems/Third Problem}
+
+\section{Fourth Problem}
+\subfile{Problems/Fourth Problem}
+
+\end{document}

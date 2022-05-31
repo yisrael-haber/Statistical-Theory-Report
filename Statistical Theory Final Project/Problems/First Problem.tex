@@ -1,0 +1,204 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{../images/}}}
+\begin{document}
+
+For $\alpha>0$ define the gamma function - 
+\[\Gamma(\alpha):=\int_0^\infty t^{\alpha-1}e^{-t} dt\]
+\begin{enumerate}
+
+
+    \item Show that for all $\alpha>0$ the integral converges and infer that the following function is a distribution - 
+    \[f(t):=\frac{t^{\alpha-1}e^{-t}}{\Gamma(\alpha)}\]
+    (Correction - f isn't exactly a distribution but $f'(t):=\frac{t^{\alpha-1}e^{-t}}{\Gamma(\alpha)}\cdot\mathbbm{1}_{\{t\geq 0\}}$is. In the solution we will talk about $f'$ as $f$.)
+    
+    \item Show that for all $\alpha>0$ we have that $\Gamma(\alpha+1)=\alpha\Gamma(\alpha)$, find a convenient expression for $\Gamma(n)$ for $n\in\mathbb{N}$.
+
+    \item Use a variable substitution on the distribution in (1) to get the gammma distribution
+    \[X\sim\Gamma(\alpha,\beta)\Longleftrightarrow f_X(x):=\begin{cases}\frac{1}{\Gamma(\alpha)\beta^{\alpha}}x^{\alpha-1}e^{-x/\beta}, & x>0 \\ 0 ,& \text{Otherwise}\end{cases}\]
+    \item Show that if $X\sim\Gamma(\alpha,\beta)$ then show that $\mathbb{E}[X]=\alpha\beta$ and $\text{Var}(x)=\alpha\beta^2$. Find a general expression for $\mathbb{E}[X^c]$ for any $c>0$.
+    
+    \item Is the gamma distribution in the exponential family of distributions?
+    
+    \item Let $X_1,\dots,X_n$ samples from the distribution $\Gamma(\alpha,\beta)$. Find a sufficient statistic for $(\alpha,\beta)$.
+    
+    \item Let $X_1,\dots,X_n$ samples from the distribution $\Gamma(\alpha,\beta)$. Assume $\alpha$ is known and show that $\sum_i X_i$ is a minimal sufficient statistic. 
+    
+    \item Assume X is normal standard distribution, And take $Y=X^2$. Show that $Y\sim \Gamma(\frac{1}{2},2)$.
+    
+\end{enumerate}
+
+\newpage
+
+\subsection*{Solution:}
+
+\begin{enumerate}
+
+
+\item Notice that we can use the following claim
+
+
+\begin{mdframed}
+
+
+\begin{claim}
+For every $\beta\in\mathbb{R}$, there is $t_0>0$ such that for every $t>t_0$ we have that $t^{\beta}<e^t$
+\end{claim}
+\begin{proof}
+If $\beta<0$ then this is obviously true since the term on the left tends to 0 and the term on the right tends to infinity and so this is true essentially directly from the definition of a limit. This can be seen by picking some positive value. Eventually the term on the right will remain over that constant, and the term on the left will remain under this constant and you will get this inequality as a consequence. \\\\
+Otherwise take $\beta\geq n\in\mathbb{N}$ notice that we can consider the fraction $\frac{e^t}{t^n}$. Both the top and the bottom tend to infinity and so we can apply L'hopital's rule, we can do this recursively until the bottom is a constant. The top will continue to stay the same throughout this process. This means the fraction will tend to infinity, and so also the original fraction will tend to infinity. This means eventually $\frac{t^n}{e^t}<1$, using simple arithmetic we get our original claim. ($t^{\beta}<t^n<e^t$)
+\end{proof}
+\end{mdframed}
+
+Now we can notice that this means that for $0<\alpha\in\mathbb{R}$ we have that there is $t_0\in\mathbb{R}$ such that for all $t>t_0$ we have that $t^{\alpha+1}<e^t$. Meaning $t^{\alpha-1}e^{-t}<t^{-2}$. We can now use this to get - 
+\[\Gamma(\alpha) = \int_0^{t_0} t^{\alpha-1}e^{-t} dt + \int_{t_0}^\infty t^{\alpha-1}e^{-t} dt \leq \int_0^{t_0} t^{\alpha-1}dt + \int_{t_0}^\infty \frac{1}{t^2} dt =\]
+\[= \left[\frac{t^{\alpha}}{\alpha}\right]^{t_0}_0 +\left[-t^{-1}\right]^\infty_{t_0} = \left(\frac{t_0^\alpha}{\alpha} - 0\right) + \left(\frac{1}{t_0} - 0\right) = \frac{t^{\alpha}_0}{\alpha}+\frac{1}{t_0}<\infty \]
+\hlfancy{goodcolor}{And so our integral converges.} Remember that a distribution is a non-negative function whose total integral is 1. Obviously we have that the above defined (corrected) f is a distribution - the integral is positive since the integrand is positive, and we normalized the integral to give us a total integral of 1. \hlfancy{goodcolor}{Alltogether the integral convergesand f is a distribution.} \qedsymbol
+
+\item We will use integration by parts
+\begin{align*}
+    \Gamma(\alpha+1) &= \int_0^{\infty} t^{\alpha}e^{-t} dt \\
+    \text{Integration By Parts }&=\begin{bmatrix} u = t^{\alpha}, & v' = e^{-t} \\ u' = \alpha t^{\alpha-1},& v = -e^{-t}\end{bmatrix}
+\end{align*}
+\begin{align*}
+    \mathcolorbox{goodcolor}{\Gamma(\alpha+1)} &=\int_0^{\infty} t^{\alpha}e^{-t} dt \\
+    &= \left[-t^{\alpha}e^{-t}\right]_0^{\infty} - \left(\int_0^{\infty} -\alpha t^{\alpha-1}e^{-t}dt\right) \\
+    &= (-0-(-0)) + \int_0^{\infty}\alpha t^{\alpha-1}e^{-t} dt= \alpha \int_0^{\infty} t^{\alpha -1}e^{-t} dt = \mathcolorbox{goodcolor}{\alpha\Gamma(\alpha)}
+\end{align*}
+And so we proved the first part. We will prove inductively the following claim for the second part 
+\begin{claim}
+For every $n\in\mathbb{N}$, \hlfancy{goodcolor}{$\Gamma(n) = (n-1)!$}.
+\end{claim}
+\begin{proof}
+For the base case $n=1$, we have that
+\[\Gamma(1)=\int_0^\infty t^0 e^{-t} dt = \left[-e^{-t}\right]_0^{\infty} = -(0-1)=1=0!\]
+For the base case assume truth for n, and notice that $\Gamma(n+1) = n\Gamma(n) = n\cdot (n-1)! = n!$, this is exactly what we want to prove and thus this concludes the claim.
+\end{proof}
+\qedsymbol
+
+\item We will use the following substitution of variables 
+\[t=\frac{x}{\beta}\text{ with } dt=\frac{1}{\beta}dx\]
+Importantly we have that $t>0\Leftrightarrow x>0$, and so the support of the distribution is still the same. Additionally
+\begin{align*}
+    \frac{t^{\alpha-1}e^{-t}}{\Gamma(\alpha)}dt \cdot\mathbbm{1}_{\{t>0\}}&= \frac{((\frac{x}{\beta})^{\alpha-1}e^{-x/\beta})}{\Gamma(\alpha)}\frac{1}{\beta}dx \cdot\mathbbm{1}_{\{x>0\}}\\
+    &= \frac{1}{\Gamma(\alpha)\beta^{\alpha-1}}\cdot\frac{1}{\beta}\cdot x^{\alpha-1}e^{-x/\beta} dx\cdot\mathbbm{1}_{\{x>0\}} \\
+    &= \frac{1}{\Gamma(\alpha)\beta^{\alpha}}\cdot x^{\alpha-1}e^{-x/\beta} dx\cdot\mathbbm{1}_{\{x>0\}}
+\end{align*}
+This means that
+\[\int_0^\infty \frac{1}{\Gamma(\alpha)\beta^{\alpha}}\cdot x^{\alpha-1}e^{-x/\beta} dx\cdot\mathbbm{1}_{\{x>0\}} = \int_0^\infty \frac{1}{\Gamma(\alpha)\beta^{\alpha}}\cdot x^{\alpha-1}e^{-x/\beta} dx = \int_0^\infty \frac{t^{\alpha-1}e^{-t}}{\Gamma(\alpha)}dt = 1\]
+Additionally it is obvious that the function is non-negative, and so we have that 
+that gives us what we are looking for - 
+\[\mathcolorbox{goodcolor}{\frac{1}{\Gamma(\alpha)\beta^{\alpha}}x^{\alpha-1}e^{-x/\beta}\cdot\mathbbm{1}_{\{x>0\}}\text{ is a distribution. (In particular, the Gamma distribution.)}}\]
+We will denote 
+\[g(x):=\frac{1}{\Gamma(\alpha)\beta^{\alpha}}x^{\alpha-1}e^{-x/\beta}\cdot\mathbbm{1}_{\{x>0\}}\]
+For the rest of the exercise. \qedsymbol
+\item Notice that
+\begin{align*}
+    \frac{1}{\beta}\cdot\mathbb{E}[X] &= \frac{1}{\beta}\cdot\int_0^{\infty} x\cdot g_X(x) dx \\
+    (\text{Variable Change }&=\textbf{[}x=\beta t, \text{    }dx=\beta dt\textbf{]}) \\ &= \frac{1}{\beta}\int_0^\infty\beta t f(t) dt =\frac{\alpha\Gamma(\alpha)}{\Gamma(\alpha)}=\alpha
+\end{align*}
+And so 
+\[\mathcolorbox{goodcolor}{\mathbb{E}[X] = \alpha\beta}\]
+Similarly we can calculate
+\begin{align*}
+    \frac{1}{\beta^2}\mathbb{E}[X^2] &= \frac{1}{\beta^2}\cdot\int_0^{\infty} x^2\cdot g_X(x) dx = \frac{1}{\beta^2}\int_0^{\infty} \beta^2 t^2 f(t)dt \\ &= \frac{\Gamma(\alpha+2)}{\Gamma(\alpha)} = \frac{1}{\Gamma(\alpha)}\cdot\left((\alpha+1)\Gamma(\alpha+1)\right) = \frac{1}{\Gamma(\alpha)}\cdot (\alpha+1)\cdot \alpha\Gamma(\alpha) = \alpha(\alpha+1)
+\end{align*} 
+Where we use exactly the same concepts as when we did for the calculation of the expected value. And so 
+\[\mathbb{E}[X^2] = \alpha(\alpha+1)\beta^2\]
+And so 
+\[\mathcolorbox{goodcolor}{\text{Var}(X)} = \mathbb{E}\left[X^2\right]-\left(\mathbb{E}[X]\right)^2
+= \alpha(\alpha+1)\beta^2 - \left(\alpha\beta\right)^2
+= \mathcolorbox{goodcolor}{\alpha\beta^2}\]
+\qedsymbol
+
+Take $c>0$. Similar to before we get that
+\begin{align*}
+\left(\frac{1}{\beta}\right)^c \mathbb{E}[X^c]&=\left(\frac{1}{\beta}\right)^c
+\int_0^\infty x^c g_X(x) dx
+\\ &=\beta^{-c}\int_0^\infty \beta^c \cdot t^c f(t) dt = \int_0^\infty t^c f(t) dt =\frac{\Gamma(\alpha+c)}{\Gamma(\alpha)}
+\end{align*}
+And so
+\[\mathcolorbox{goodcolor}{\mathbb{E}[X^c] = \beta^c \frac{\Gamma(\alpha+c)}{\Gamma(\alpha)}}\]
+\emph{Just to be clear, throughout this whole exercise we are utilizing the change of variables we saw in the previous part - this, as can be seen in this exercise, really simplifies the problem.
+Notice that throughout this exercise we also use the following idea -} 
+\[\int_0^{\infty} t^{\gamma}f(t) dt = \int_0^{\infty} t^{\gamma}\frac{t^{\alpha-1}e^{-t}}{\Gamma(\alpha)} dt = \frac{1}{\Gamma(\alpha)} \int_0^{\infty} t^{\alpha+\gamma-1} e^{-t} dt = \frac{\Gamma(\alpha+\gamma)}{\Gamma(\alpha)}\]
+\item
+Notice that we have 2 independent parameters $\alpha,\beta$ and so we have to check whether or not this is in the 2 dimensional family of exponential distribution. Remember the definition of the exponential family of distributions from the lecture -  
+
+\begin{mdframed}[backgroundcolor=blue!20] 
+\begin{definition}
+Assume that $\Theta$ is an open subset of $\mathbb{R}^p$. We will say that a distribution $f_{\overrightarrow{\theta}}(\overrightarrow{y})$ is in the family of exponential distributions if all of the following occur: \\
+(1). The support is independent of $\overrightarrow{\theta}$.\\
+(2). The distribution can be written in the following way
+\[f_{\overrightarrow{\theta}}(\overrightarrow{y}) = \exp\left(\sum_{j=1}^k c_j(\overrightarrow{\theta})T_j(\overrightarrow{y}) + d(\overrightarrow{\theta}) + S(\overrightarrow{y})\right)\]
+\end{definition}
+\end{mdframed}
+
+Notice first that the support of the density function is independent of the parameters - (all of the non-negative numbers). And so what is left for us is to show that the density function of the $\Gamma$ distribution can be expressed in the following way
+\[f_{(\alpha,\beta)}(x):=\exp\left(\sum_{j=1}^k c_j(\alpha,\beta) T_j(x) + d(\alpha,\beta) + S(x)\right)\]
+Now we can try to show this. Take $X\sim \Gamma(\alpha,\beta)$. 
+\begin{align*}f_X(x) &= \frac{1}{\Gamma(\alpha)\beta^{\alpha}}x^{\alpha-1}e^{-x/\beta} = e^{-x/\beta}\cdot e^{-\log\Gamma(\alpha) - \alpha\log\beta + (\alpha-1)\log x} \\&= e^{-x/\beta + (\alpha-1)\log x -\log\Gamma(\alpha)-\alpha\log\beta}\end{align*}
+Now take 
+\[\mathcolorbox{goodcolor}{\overrightarrow{c}(\alpha,\beta) = \left(\alpha-1,-\frac{1}{\beta}\right), \overrightarrow{T}(x) = \left(\log x,x\right), S(x):=0, d(\alpha,\beta) = -\log\Gamma(\alpha)-\alpha\log\beta}\]
+And we get that we do have the required structure which tells us that we have that \hlfancy{goodcolor}{the $\Gamma$ distribution} \hlfancy{goodcolor}{is in the 2-dimensional family of exponential distribution.}\,\qedsymbol
+
+\item Remember the Fischer-Neyman Factorization theorem
+
+\begin{mdframed}[backgroundcolor=blue!20] 
+\begin{theorem}[Fisher-Neyman Factorization Theorem] 
+\label{Theorem: 1}
+A statistic $T\left(\overrightarrow{Y}\right)$ is sufficient for a parameter $\theta$ if and only if for all $\theta\in\Theta$ we have:
+$L\left(\theta;\overrightarrow{y}\right) = g\left(T\left(\overrightarrow{y}\right)\mid\theta\right)\cdot h\left(\overrightarrow{y}\right)$. Where the first factor isn't directly dependent on $\overrightarrow{y}$ and the second factor is independent of $\theta$. 
+\end{theorem}
+\end{mdframed}
+
+This means that  we need to find the likelihood function and then try to factor it as in the theorem. We have i.i.d. samples and so 
+\[L(\alpha,\beta; \overrightarrow{x}) = \prod_{i=1}^n f_{X_i}(x_i) = \prod_{i=1}^n \left(\frac{1}{\Gamma(\alpha)\beta^{\alpha}}x_i^{\alpha-1}e^{-x_i/\beta}\cdot \mathbbm{1}_{\{x_i>0\}}\right)=\]
+\[=\left(\frac{1}{\Gamma(\alpha)\beta^{\alpha}}\right)^n\cdot\mathbbm{1}_{\{\forall i:x_i>0\}}\cdot \left(\prod_{i=1}^n x_i\right)^{\alpha-1}\cdot \prod_{i=1}^n e^{-x_i/\beta} = \]
+\[= \left(\frac{1}{\Gamma(\alpha)\beta^{\alpha}}\right)^n\cdot\mathbbm{1}_{\{\forall i:x_i>0\}}\cdot \left(\prod_{i=1}^n x_i\right)^{\alpha-1}\cdot e^{-\frac{1}{\beta} \sum_{i=1}^n x_i}\]
+And so it is natural to consider the statistic
+\[\mathcolorbox{goodcolor}{T\left(\overrightarrow{X}\right) := \left(T_1\left(\overrightarrow{X}\right):= \sum_{i=1}^n X_i, T_2\left(\overrightarrow{X}\right):= \prod_{i=1}^n X_i\right)}\]
+Now we can see that
+\[L(\alpha, \beta;\overrightarrow{x}) = \left(\frac{1}{\Gamma(\alpha)\beta^{\alpha}}\right)^n\cdot\mathbbm{1}_{\{\forall i:x_i>0\}}\cdot \left(T_2\left(\overrightarrow{x}\right)\right)^{\alpha-1}\cdot e^{-\frac{1}{\beta} T_1\left(\overrightarrow{x}\right)}\]
+And so the natural factorization is
+\begin{align*}
+g(T(\overrightarrow{X})\mid\overrightarrow{\theta}):&= \left(\frac{1}{\Gamma(\alpha)\beta^{\alpha}}\right)^n\cdot\left(T_2\left(\overrightarrow{x}\right)\right)^{\alpha-1}\cdot e^{-\frac{1}{\beta} T_1\left(\overrightarrow{x}\right)} \\
+h(\overrightarrow{x}):&= \mathbbm{1}_{\{\forall i:x_i>0\}}
+\end{align*}
+And so we have the factorization needed - \hlfancy{goodcolor}{T is a sufficient statistic.}\,\qedsymbol
+
+\item
+Remember the factorization from the previous part, notice that when $\alpha$ is known that we can redo the factorization in the following manner
+\begin{align*}
+g(T(\overrightarrow{X})\mid\beta):&= \left(\frac{1}{\Gamma(\alpha)\beta^{\alpha}}\right)^n\cdot e^{-\frac{1}{\beta} T(\overrightarrow{X})} \\
+h(\overrightarrow{x}):&= \left(\prod_{i=1}^n x_i\right)^{\alpha-1}\cdot\mathbbm{1}_{\{\forall i:x_i>0\}}
+\end{align*}
+Where $T(\overrightarrow{X}):=\sum_{i=1}^n x_i$ is the statistic we are interested in. And so T is a sufficient statistic. Remember the following criterion for minimality
+
+\begin{mdframed}[backgroundcolor=blue!20] 
+Assume T is a sufficient statistic. T is minimal sufficient if and only if:
+\[\text{The ratio of the likelihoods of 2 samples is independent of }\theta\Longleftrightarrow\text{ T agrees on the samples}\]
+\end{mdframed}
+
+And so, by taking two samplings $(x_i)_{i=1}^n, (y_i)_{i=1}^n$ we have that the ratio of likelihoods is 
+\begin{align*}
+    \frac{L(\beta;\overrightarrow{x})}{L(\beta;\overrightarrow{y})} &= \frac{\left(\frac{1}{\Gamma(\alpha)\beta^{\alpha}}\right)^n\cdot\mathbbm{1}_{\{\forall i:x_i>0\}}\cdot \left(\prod_{i=1}^n x_i\right)^{\alpha-1}\cdot e^{-\frac{1}{\beta} \sum_{i=1}^n x_i}}{\left(\frac{1}{\Gamma(\alpha)\beta^{\alpha}}\right)^n\cdot\mathbbm{1}_{\{\forall i:y_i>0\}}\cdot \left(\prod_{i=1}^n y_i\right)^{\alpha-1}\cdot e^{-\frac{1}{\beta} \sum_{i=1}^n y_i}}= \\ &= \frac{\mathbbm{1}_{\{\forall i:x_i>0\}}}{\mathbbm{1}_{\{\forall i:y_i>0\}}}\cdot \left(\prod_{i=1}^n \left(\frac{x_i}{y_i}\right)\right)^{\alpha-1} \cdot e^{-\frac{1}{\beta}(\sum_i y_i - \sum_i x_i)}
+\end{align*}
+Notice that the 2 leftmost factors in the above product are independent of $\beta$, and so the total ratio is independent of $\beta$ if and only if the rightmost factor in the product is independent of $\beta$. The only way for the rightmost factor to be independent of $\beta$ is for the exponent to be zero. This only happens when
+\[\sum_{i=1}^n x_i = \sum_{i=1}^n y_i\]
+This tells us that the ratio is independent of $\beta$ if and only if $T(\overrightarrow{X})=T(\overrightarrow{Y})$ and so we have shown what we need in order to know whether T is a minimal sufficient statistic or not - in this case \hlfancy{goodcolor}{T is a minimal sufficient statistic.}\,\qedsymbol
+
+\item First notice that
+\begin{align*}
+    \underline{\Gamma\left(\frac{1}{2}\right)} &= \int_0^\infty \frac{e^{-t}}{\sqrt{t}} dt \\
+    (\text{Variable Change }&=\textbf{[}t= u^2/2, \text{    }dt=u du\textbf{]}) \\
+    &= \sqrt{2}\cdot \int_0^\infty \frac{e^{-u^2/2}}{u}\cdot udu =
+    \frac{2}{\sqrt{2}}\cdot\frac{\sqrt{\pi}}{\sqrt{\pi}}\cdot\int_0^\infty e^{-u^2/2}du \\ &= \sqrt{\pi}\cdot \int_{-\infty}^{\infty} \frac{e^{-u^2/2}}{\sqrt{2\pi}}du = \sqrt{\pi}\cdot\int_{-\infty}^{\infty}f_{\mathcal{N}(0,1)}(u) du = \sqrt{\pi}\cdot 1 = \underline{\sqrt{\pi}}
+\end{align*}
+Where F is the CDF of $\mathcal{N}(0,1)$. Now take $X\sim\mathcal{N}(0,1)$, and $Y=X^2$. We want to find the distribution of Y. Notice that if $Z\sim\Gamma(\frac{1}{2}, 2)$ then the probability density function is
+\[f_Z(x):= \frac{1}{\Gamma(\frac{1}{2}) 2^{\frac{1}{2}}}\cdot x^{-\frac{1}{2}}e^{-\frac{1}{2} x}\cdot \mathbbm{1}_{\{x>0\}} = \frac{1}{\sqrt{2\pi}}\cdot x^{-\frac{1}{2}}e^{-\frac{1}{2} x}\cdot \mathbbm{1}_{\{x>0\}}\]
+And so we want to show that $f_Z(x)dx = f_Y(x)dx$. This would imply $Y\sim\Gamma\left(\frac{1}{2},2\right)$. And so
+\begin{align*}\underline{f_Y(x)dx} &= f_{X^2}(x)dx = f_{X^2}(\sqrt{x})\cdot \frac{1}{2\sqrt{x}}\cdot 2\cdot\mathbbm{1}_{\{x>0\}}dx\\&= \frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}x}\cdot \frac{1}{\sqrt{x}} \cdot\mathbbm{1}_{\{x>0\}}dx= \underline{f_Z(x) dx}\Longrightarrow \mathcolorbox{goodcolor}{Y\sim\Gamma\left(\frac{1}{2}, 2\right)}\end{align*}
+\qedsymbol
+\end{enumerate}
+\noindent\makebox[\linewidth]{\rule{\linewidth}{2pt}}
+\end{document}
